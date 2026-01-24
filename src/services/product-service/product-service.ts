@@ -9,12 +9,19 @@ interface ProductQueryParams {
   select?: string;
 }
 
+interface ProductAPIResponse {
+  products: Product[];
+  total: number;
+  skip: number;
+  limit: number;
+}
+
 export const useProductService = () => {
   // using this pattern will later allow us to drop in a authentication for API calls
   // const {axiosFetch} = useAuth();
   const productEndpoint = "/products"
   /** Fetch all products */
-  const getAllProducts = async (params: ProductQueryParams = {}): Promise<Product[]> => {
+  const getAllProducts = async (params: ProductQueryParams = {}): Promise<ProductAPIResponse> => {
 
 
     const queryParams: Partial<ProductQueryParams> = {};
@@ -24,7 +31,7 @@ export const useProductService = () => {
     if (params.order) queryParams.order = params.order;
     if (params.select) queryParams.select = params.select;
 
-    const axiosResponse = await axiosClient.get<Product[]>(productEndpoint, {params: queryParams});
+    const axiosResponse = await axiosClient.get<ProductAPIResponse>(productEndpoint, {params: queryParams});
     return axiosResponse.data;
   };
 

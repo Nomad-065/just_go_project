@@ -1,4 +1,12 @@
-export default function FullPageLoader({message = "Loading...", size = 64,}) {
+interface FullPageLoaderProps {
+  message?: string;
+  size?: number;
+}
+
+export default function FullPageLoader({
+                                         message = "Loading...",
+                                         size = 64,
+                                       }: FullPageLoaderProps) {
   return (
     <div className="fixed inset-0 flex flex-col items-center justify-center bg-gray-50 z-50">
       <div
@@ -8,5 +16,4 @@ export default function FullPageLoader({message = "Loading...", size = 64,}) {
       {message && <p className="mt-4 text-gray-700 font-medium">{message}</p>}
     </div>
   );
-};
-
+}

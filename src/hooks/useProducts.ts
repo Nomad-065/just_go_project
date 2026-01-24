@@ -34,8 +34,8 @@ export const useProducts = () => {
         });
       },
       getNextPageParam: (lastPage) => {
-        if (lastPage.length < limit) return undefined;
-        return skip + lastPage.length; // next skip
+        const nextSkip = lastPage.skip + lastPage.limit;
+        return nextSkip < lastPage.total ? nextSkip : undefined;
       },
       initialPageParam: skip, // Start with no cursor
       staleTime: 10 * 60 * 1000,
