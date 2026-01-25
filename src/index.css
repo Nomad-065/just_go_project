@@ -7,27 +7,26 @@ html, body, #root {
     margin: 0;
     padding: 0;
     overflow-y: auto;
-    font-family: "Work Sans", "Sofia Sans", -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    font-family: "Montserrat", "Nunito Sans", -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
 
-@media (prefers-color-scheme: light) {
-    :root {
-        color: #213547;
-        background-color: #ffffff;
-    }
 
-    a:hover {
-        color: #747bff;
-    }
+@theme {
+    /* brand / semantic colors */
+    --color-justgo-green: rgb(var(--colour-primary));
+    --color-justgo-purple: rgb(var(--colour-secondary));
+    --color-justgo-blue: rgb(var(--colour-tertiary));
 
-    button {
-        background-color: #f9f9f9;
-    }
+    /* UI tokens */
+    --color-bg: #ffffff;
+    --color-surface: #f8fafc;
+    --color-muted: #64748b;
 }
+
 
 @keyframes logo-spin {
     from {
