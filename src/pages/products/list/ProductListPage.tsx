@@ -1,10 +1,10 @@
 import {Link} from "react-router-dom";
-import {useProducts} from "../../hooks/useProducts.ts";
-import FullPageLoader from "../../components/ui/loading/full-page-loader.tsx";
+import {useProducts} from "../../../hooks/useProducts.ts";
+import LoadingOverlay from "../../../components/ui/loading/loading-overlay.tsx";
 
 // Sample dummy products
 
-const ProductsPage = () => {
+const ProductListPage = () => {
   const {useGetAllProductsInfinite} = useProducts();
 
   const {
@@ -19,14 +19,14 @@ const ProductsPage = () => {
     limit: 20, // first 20 products
     options: {enabled: true}
   });
-  if (isLoading) return <FullPageLoader message="Loading products..."/>;
 
   if (isError) return <div className="p-8 text-center text-red-600">{(error as Error).message}</div>;
 
   const products = data?.pages.flatMap(page => page.products) || [];
 
   return (
-    <div className="min-h-screen bg-gray-50 px-4 py-8 flex flex-col items-center justify-between">
+    <div className="min-h-screen bg-gray-50 px-4 py-8 flex flex-col items-center justify-between relative">
+      <LoadingOverlay visible={isLoading}/>
       <h1 className="text-3xl md:text-4xl font-bold text-gray-900 text-center mb-8">
         Our Products
       </h1>
@@ -72,4 +72,4 @@ const ProductsPage = () => {
   );
 };
 
-export default ProductsPage;
+export default ProductListPage;

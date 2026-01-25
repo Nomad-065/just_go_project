@@ -1,7 +1,10 @@
 import {Route, Routes} from "react-router-dom";
 import HomePage from "./pages/home/HomePage.tsx";
-import ProductsPage from "./pages/products/ProductsPage.tsx";
+import ProductListPage from "./pages/products/list/ProductListPage.tsx";
 import Layout from "./components/layout.tsx";
+import ProductCategoryPage from "./pages/products/categories/ProductCategoryPage.tsx";
+import ProductSearchPage from "./pages/products/search/ProductSearchPage.tsx";
+import SettingsPage from "./pages/settings/SettingsPage.tsx";
 
 
 const App = () => {
@@ -9,7 +12,10 @@ const App = () => {
     <Routes>
       <Route element={<Layout/>}>
         <Route path="/" element={<HomePage/>}/>
-        <Route path="/products" element={<ProductsPage/>}/>
+        <Route path="/products" element={<ProductListPage/>}/>
+        <Route path="/products/categories" element={<ProductCategoryPage/>}/>
+        <Route path="/products/search" element={<ProductSearchPage/>}/>
+        <Route path="/settings" element={<SettingsPage/>}/>
       </Route>
 
       {/* 404 */}

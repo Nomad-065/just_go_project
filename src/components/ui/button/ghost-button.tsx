@@ -1,33 +1,43 @@
-import {Button} from "@mui/material";
+import {Button, type ButtonProps, type SxProps, type Theme} from "@mui/material";
 import {cn} from "../../../utils/cn";
+import type {ElementType, ReactNode} from "react";
 
+
+interface GhostButtonProps extends ButtonProps {
+  children: ReactNode;
+  className?: string;
+  slim?: boolean;
+  sx?: SxProps<Theme>;
+  icon?: ElementType;
+  animationClassName?: string;
+}
 
 const GhostButton = ({
                        children,
                        className = "",
-                       size = "regular", // "regular" or "slim"
+                       slim = false, // "regular" or "slim"
                        sx = {},
                        icon: Icon,
                        animationClassName,
                        ...rest
-                     }) => {
+                     }: GhostButtonProps) => {
 
-  const sizeStyles = size === "regular"
-    ? {}
-    : {
+  const sizeStyles = slim
+    ? {
       minHeight: 0,
       paddingTop: "0.2125rem",
       paddingBottom: "0.2125rem",
       paddingLeft: "1rem",
       paddingRight: "1rem",
-    };
+    }
+    : {}
 
   return (
     <Button
       // variant='contained'
       className={cn(
-        "text-krowten-green dark:text-gray-300 font-semibold",
-        "hover:bg-krowten-green/10 dark:hover:bg-krowten-green/40 transition-all truncate",
+        "text-justgo-green dark:text-gray-300 font-semibold",
+        "hover:bg-justgo-green/10 dark:hover:bg-justgo-green/40 transition-all truncate",
         "group relative overflow-hidden flex items-center justify-center gap-2 rounded-md",
         className
       )}
