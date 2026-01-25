@@ -22,10 +22,6 @@ html, body, #root {
     --color-justgo-purple: rgb(var(--colour-secondary));
     --color-justgo-blue: rgb(var(--colour-tertiary));
 
-    /* UI tokens */
-    --color-bg: #ffffff;
-    --color-surface: #f8fafc;
-    --color-muted: #64748b;
 }
 
 

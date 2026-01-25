@@ -1,13 +1,9 @@
 import {Link} from "react-router-dom";
-import PrimaryButton from "../../components/ui/button/primary-button.tsx";
-import {ArrowRight} from "lucide-react";
-import OutlineButton from "../../components/ui/button/outline-button.tsx";
-import GhostButton from "../../components/ui/button/ghost-button.tsx";
 
 const HomePage = () => {
   return (
     <div
-      className="flex w-full h-full flex-col items-center justify-center min-h-screen bg-white dark:bg-neutral-600 px-4 gap-3 animate-fadeIn">
+      className="flex w-full h-full flex-col items-center justify-center min-h-screen bg-white dark:bg-neutral-500 px-4 gap-3 animate-fadeIn">
       <h1 className="text-4xl md:text-5xl font-bold  text-center mb-4">
         Welcome to our new
       </h1>
@@ -28,21 +24,24 @@ const HomePage = () => {
       >
         Get Started
       </Link>
-      <PrimaryButton
-        className={'w-30'}
-        icon={ArrowRight}>
-        Get Started
-      </PrimaryButton>
-      <OutlineButton
-        className={'w-30'}
-        icon={ArrowRight}>
-        Get Started
-      </OutlineButton>
-      <GhostButton
-        className={'w-30'}
-        icon={ArrowRight}>
-        Get Started
-      </GhostButton>
+      {/*<PrimaryButton*/}
+      {/*  slim*/}
+      {/*  className={'w-30'}*/}
+      {/*  icon={ArrowRight}>*/}
+      {/*  Get Started*/}
+      {/*</PrimaryButton>*/}
+      {/*<OutlineButton*/}
+      {/*  slim*/}
+      {/*  className={'w-30'}*/}
+      {/*  icon={ArrowRight}>*/}
+      {/*  Get Started*/}
+      {/*</OutlineButton>*/}
+      {/*<GhostButton*/}
+      {/*  slim*/}
+      {/*  className={'w-30'}*/}
+      {/*  icon={ArrowRight}>*/}
+      {/*  Get Started*/}
+      {/*</GhostButton>*/}
     </div>
   );
 };

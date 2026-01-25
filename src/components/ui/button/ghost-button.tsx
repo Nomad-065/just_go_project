@@ -34,10 +34,10 @@ const GhostButton = ({
 
   return (
     <Button
-      // variant='contained'
+      // variant='text'
       className={cn(
-        "text-justgo-green dark:text-gray-300 font-semibold",
-        "hover:bg-justgo-green/10 dark:hover:bg-justgo-green/40 transition-all truncate",
+        "text-justgo-green dark:text-gray-300 !font-semibold",
+        "hover:!bg-justgo-green/20 transition-all truncate",
         "group relative overflow-hidden flex items-center justify-center gap-2 rounded-md",
         className
       )}

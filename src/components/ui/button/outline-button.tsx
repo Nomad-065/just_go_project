@@ -35,8 +35,7 @@ const OutlineButton = ({
     <Button
       variant='outlined'
       className={cn(
-        "border border-justgo-green text-justgo-green font-semibold",
-        "hover:bg-jutsgo-green hover:text-white ",
+        "border border-justgo-green text-justgo-green !font-semibold",
         "transition-all truncate",
         "group relative overflow-hidden flex items-center justify-center gap-2 rounded-md",
         className
