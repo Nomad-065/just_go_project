@@ -1,11 +1,28 @@
-import {Link} from "react-router-dom";
 import {useProducts} from "../../../hooks/useProducts.ts";
 import LoadingOverlay from "../../../components/ui/loading/loading-overlay.tsx";
+import Table, {type Column} from "../../../components/ui/table/table.tsx";
+import type {Product} from "../../../models/product.ts";
+import {useProductFilterStore} from "../../../store/product-filter-store.ts";
+import ImageWithSkeleton from "../../../components/ui/images/image-with-skeleton.tsx";
+import {useToast} from "../../../hooks/useToast.tsx";
+import {useEffect} from "react";
+import PrimaryButton from "../../../components/ui/button/primary-button.tsx";
+import {useCurrency} from "../../../hooks/useCurrency.ts";
+// import {useState} from "react";
 
-// Sample dummy products
 
 const ProductListPage = () => {
   const {useGetAllProductsInfinite} = useProducts();
+  const {showToast, ToastComponent} = useToast();
+  const {currencySymbol} = useCurrency();
+  // const [filter, setFilter] = useState<string>('');
+  const filter = useProductFilterStore(state => state.filter);
+  const setFilter = useProductFilterStore(state => state.setFilter);
+
+  const sortBy = useProductFilterStore((state) => state.sortBy);
+  const order = useProductFilterStore((state) => state.order);
+  const toggleSortBy = useProductFilterStore((state) => state.toggleSortBy);
+
 
   const {
     data,
@@ -16,58 +33,119 @@ const ProductListPage = () => {
     hasNextPage,
     isFetchingNextPage,
   } = useGetAllProductsInfinite({
-    limit: 20, // first 20 products
+    limit: 20,
+    select: 'id,title,brand,thumbnail,price,rating,availabilityStatus',
+    sortBy,
+    order,
     options: {enabled: true}
   });
 
-  if (isError) return <div className="p-8 text-center text-red-600">{(error as Error).message}</div>;
+  // if (isError) return <div className="p-8 text-center text-red-600">{(error as Error).message}</div>;
+
+  const columns: Column<Product, keyof Product>[] = [
+    {
+      dataIndex: "id",
+      header: "Product ID",
+      width: 120,
+      minWidth: 100,
+      align: 'right',
+    },
+    {
+      dataIndex: "title",
+      header: "Product Title",
+      render: (val) => val as string ?? 'N/A',
+    },
+    {
+      dataIndex: 'brand',
+      header: 'Brand',
+      render: (val) => val as string ?? 'Unknown Brand',
+    },
+    {
+      dataIndex: "thumbnail",
+      header: "Thumbnail",
+      align: 'center',
+      // render: (val) => <img src={val as string} alt="product" className="w-16 h-16 rounded-md bg-white"/>,
+      render: (val) => {
+
+        return (
+          <div className={'flex items-center justify-center'}>
+            <ImageWithSkeleton src={val as string} alt="product" className="w-16 h-16 rounded-md bg-white"/>
+          </div>
+        );
+      },
+    },
+    {
+      dataIndex: "price",
+      header: "Price",
+      align: 'center',
+      render: (val) => val != null ? `${currencySymbol}${val}` : 'N/A',
+    },
+    {
+      dataIndex: "rating",
+      header: "Rating",
+      render: (val) => val as string ?? 'N/A',
+    },
+    {
+      dataIndex: 'availabilityStatus',
+      header: "Availability Status",
+      render: (val) => val as string ?? 'N/A',
+    }
+
+  ];
 
   const products = data?.pages.flatMap(page => page.products) || [];
 
+  const filteredProducts = products.filter(product => {
+    if (!filter.trim()) return true;
+    const lower = filter.toLowerCase();
+    return (
+      product.title.toLowerCase().includes(lower)
+    );
+  });
+
+  useEffect(() => {
+    if (isError && error) {
+      showToast(error.message ?? "Failed to load products", "error");
+    }
+  }, [isError, error, showToast]);
+
   return (
-    <div className="min-h-screen px-4 py-8 flex flex-col items-center justify-between relative">
+    <div className="flex flex-col gap-2 p-4 h-full w-full relative">
+      {ToastComponent}
       <LoadingOverlay visible={isLoading}/>
-      <h1 className="text-3xl md:text-4xl font-bold text-gray-900 text-center mb-8">
-        Our Products
-      </h1>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4 overflow-y-auto">
-        {products.map((product) => (
-          <div
-            key={product.id}
-            className="bg-white rounded-lg shadow-md p-4 flex flex-col items-center hover:shadow-lg transition"
-          >
-            <img
-              src={product.images[0]}
-              alt={product.title}
-              className="w-32 h-32 object-cover mb-4 rounded"
-            />
-            <h2 className="text-lg font-semibold text-gray-800 text-center mb-2">
-              {product.title}
-            </h2>
-            <p className="text-indigo-600 font-bold mb-4">${product.price}</p>
-            <Link
-              to={`/products/${product.id}`}
-              className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
-            >
-              View Details
-            </Link>
-          </div>
-        ))}
-      </div>
-
-      {/* Load more button */}
-      {hasNextPage && (
-        <div className="mt-8 text-center">
-          <button
-            onClick={() => fetchNextPage()}
-            disabled={isFetchingNextPage}
-            className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
-          >
-            {isFetchingNextPage ? "Loading..." : "Load More"}
-          </button>
+      <div className="flex w-full items-end justify-between">
+        <div className="flex flex-col sm:flex-row w-fit items-center justify-center gap-2">
+          <h1 className="text-2xl font-bold text-white bg-justgo-green px-3 py-1 rounded-full text-center">
+            Product List
+          </h1>
+          <p> Browse through our products </p>
         </div>
-      )}
+        <PrimaryButton
+          slim
+          className={'h-8 w-58'}
+          onClick={() => toggleSortBy("price")}
+        >
+          {sortBy === "price"
+            ? `Sorting by price (${order === "asc" ? "↑" : "↓"})`
+            : "Default Sorting"}
+        </PrimaryButton>
+      </div>
+      <Table
+        columns={columns}
+        data={filteredProducts}
+        onRowClick={(row: Product) => console.log("Row clicked:", row)}
+        filterValue={filter}
+        onFilterValueChange={(value) => {
+          setFilter(value);
+        }}
+        onScrollEnd={() => {
+          if (!isFetchingNextPage && hasNextPage) {
+            fetchNextPage()
+          }
+        }}
+        loading={isLoading || isFetchingNextPage}
+        emptyText={'No products found'}
+      />
     </div>
   );
 };

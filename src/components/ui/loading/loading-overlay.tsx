@@ -1,6 +1,6 @@
 import {cn} from "../../../utils/cn.ts";
 
-interface LoadingOverlayProps {
+type LoadingOverlayProps = {
   visible: boolean;
   message?: string;
   blur?: boolean;

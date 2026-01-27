@@ -56,7 +56,7 @@ const ProductCategoryPage = () => {
       header: "Product ID",
       width: 120,
       minWidth: 100,
-      align:'right',
+      align: 'right',
     },
     {
       dataIndex: "name",
@@ -122,7 +122,7 @@ const ProductCategoryPage = () => {
           <h1 className="text-2xl font-bold text-white bg-justgo-green px-2 py-1 rounded-full text-center">
             Product Categories
           </h1>
-          <p className="">
+          <p>
             Manage and browse product categories
           </p>
         </div>
@@ -131,10 +131,13 @@ const ProductCategoryPage = () => {
         columns={columns}
         data={data}
         onRowClick={(row: Product) => console.log("Row clicked:", row)}
-        onFilterChange={(value) => {
+        onFilterValueChange={(value) => {
           setFilter(value);
         }}
-
+        onScrollEnd={() => {
+          console.log('ending')
+        }}
+        loading={false}
       />
       {/* Categories grid */}
       {/*<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">*/}

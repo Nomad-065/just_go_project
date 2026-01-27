@@ -1,4 +1,4 @@
-interface FullPageLoaderProps {
+type FullPageLoaderProps = {
   message?: string;
   size?: number;
 }

@@ -150,7 +150,7 @@ const Layout = () => {
                                 className={cn(
                                   "flex items-center gap-3 px-3 py-3 transition-all w-full h-6 duration-300 rounded-l-md ",
                                   isActive
-                                    ? 'bg-white dark:bg-neutral-500 dark:text-white text-justgo-green font-semibold hover:bg-justgo-blue hover:text-white'
+                                    ? 'bg-white dark:bg-neutral-600 dark:text-white text-justgo-green font-semibold hover:bg-justgo-blue hover:text-white'
                                     : 'hover:bg-justgo-purple text-white hover:text-white hover:font-semibold',
                                 )}
                               >
@@ -177,7 +177,7 @@ const Layout = () => {
                       className={cn(
                         "flex items-center gap-3 px-3 py-3 transition-all w-full h-8 duration-300 rounded-l-md ",
                         isActive
-                          ? 'bg-white dark:bg-neutral-500 dark:text-white text-justgo-green font-semibold hover:bg-justgo-blue hover:text-white'
+                          ? 'bg-white dark:bg-neutral-600 dark:text-white text-justgo-green font-semibold hover:bg-justgo-blue hover:text-white'
                           : 'hover:bg-justgo-purple text-white hover:text-white hover:font-semibold',
                       )}
                     >

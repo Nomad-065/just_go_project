@@ -3,7 +3,7 @@ import {cn} from "../../../utils/cn";
 import CloseIcon from "@mui/icons-material/Close";
 import * as React from "react";
 
-export interface InputFieldProps extends Omit<InputProps, "onChange"> {
+interface InputFieldProps extends Omit<InputProps, "onChange"> {
   label?: string;
   value?: string | number;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
