@@ -2,7 +2,7 @@ import {Tooltip, Button, type ButtonProps, type TooltipProps, type SvgIconProps}
 import {cn} from "../../../utils/cn";
 import type {ComponentType} from "react";
 
-interface ActionButtonProps extends Omit<ButtonProps, "title"> {
+interface ActionButtonProps extends ButtonProps {
   helperText: string;
   icon?: ComponentType<SvgIconProps>;
   tooltipPlacement?: TooltipProps["placement"];

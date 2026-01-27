@@ -195,7 +195,7 @@ const Layout = () => {
           })}
         </div>
 
-        <main className="flex-1 flex flex-col w-full min-h-0 overflow-hidden rounded-lg">
+        <main className="flex-1 flex flex-col w-full min-h-0 overflow-hidden rounded-lg bg-gray-100 dark:bg-neutral-600">
           <Outlet/>
         </main>
       </div>

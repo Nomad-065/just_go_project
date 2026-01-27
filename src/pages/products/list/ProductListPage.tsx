@@ -25,7 +25,7 @@ const ProductListPage = () => {
   const products = data?.pages.flatMap(page => page.products) || [];
 
   return (
-    <div className="min-h-screen bg-gray-50 px-4 py-8 flex flex-col items-center justify-between relative">
+    <div className="min-h-screen px-4 py-8 flex flex-col items-center justify-between relative">
       <LoadingOverlay visible={isLoading}/>
       <h1 className="text-3xl md:text-4xl font-bold text-gray-900 text-center mb-8">
         Our Products

@@ -36,7 +36,7 @@ const PrimaryButton = ({
       variant="contained"
       color="primary"
       className={cn(
-        "!font-semibold truncate",
+        "!font-semibold truncate !text-white",
         "hover:!brightness-125 transition-all hover:!drop-shadow-md",
         "group relative overflow-hidden flex items-center justify-center gap-2 rounded-md",
         className

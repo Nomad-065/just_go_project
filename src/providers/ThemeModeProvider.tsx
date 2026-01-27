@@ -33,9 +33,9 @@ export const ThemeModeProvider = ({children}: ThemeModeProviderProps) => {
           secondary: {main: "#7b1fa2"},
           tertiary: {main: "#2194f3"},
           ...(mode === "dark" && {
-            primary: {main: "#198e59"},
-            secondary: {main: "#561671"},
-            tertiary: {main: "#2194f3"},
+            primary: {main: "#1c784f"},
+            secondary: {main: "#63277c"},
+            tertiary: {main: "#1e70b5"},
             background: {
               default: "#121212",
               paper: "#1e1e1e",

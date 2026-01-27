@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 const HomePage = () => {
   return (
     <div
-      className="flex w-full h-full flex-col items-center justify-center min-h-screen bg-white dark:bg-neutral-500 px-4 gap-3 animate-fadeIn">
+      className="flex w-full h-full flex-col items-center justify-center min-h-screen px-4 gap-3 animate-fadeIn">
       <h1 className="text-4xl md:text-5xl font-bold  text-center mb-4">
         Welcome to our new
       </h1>
