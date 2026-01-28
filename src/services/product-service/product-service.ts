@@ -8,6 +8,7 @@ interface ProductQueryParams {
   sortBy?: string;
   order?: "asc" | "desc" | null;
   select?: string;
+  q?: string;
 }
 
 interface ProductAPIResponse {
@@ -48,6 +49,25 @@ export const useProductService = () => {
     return axiosResponse.data;
   };
 
+  /** Fetch products by search query */
+  const searchProducts = async (params: ProductQueryParams = {}): Promise<ProductAPIResponse> => {
+    const queryParams: Partial<ProductQueryParams> = {};
+    if (params.limit !== undefined) queryParams.limit = params.limit;
+    if (params.skip !== undefined) queryParams.skip = params.skip;
+    if (params.sortBy) queryParams.sortBy = params.sortBy;
+    if (params.order) queryParams.order = params.order;
+    if (params.select) queryParams.select = params.select;
+    if (params.q) queryParams.q = params.q;
+
+    const axiosResponse = await axiosClient.get<ProductAPIResponse>(
+      `${productEndpoint}/search`,
+      {
+        params: queryParams
+      }
+    );
+    return axiosResponse.data;
+  };
+
   /** Fetch single product by ID */
   const getProductById = async (id: number): Promise<Product> => {
     const axiosResponse = await axiosClient.get<Product>(`${productEndpoint}/${id}`);
@@ -59,5 +79,6 @@ export const useProductService = () => {
     getProductsByCategory,
     getAllProductCategories,
     getProductById,
+    searchProducts,
   };
 };

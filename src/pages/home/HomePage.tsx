@@ -14,7 +14,7 @@ const HomePage = () => {
       </div>
 
       <p className="text-center max-w-xl mb-8">
-        Discover a wide range of products with seamless browsing and fast checkout.
+        Discover a wide range of products with seamless browsing.
         Start exploring our warehouse today!
       </p>
 

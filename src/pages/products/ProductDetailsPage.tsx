@@ -50,7 +50,11 @@ const ProductDetailsPage = () => {
               className={'w-30 h-8 '}
               icon={ArrowBigLeft}
               onClick={() => {
-                navigate('/products');
+                if (window.history.length > 1) {
+                  navigate(-1);
+                } else {
+                  navigate("/products");
+                }
               }}
             >
               Go Back

@@ -1,128 +1,220 @@
-import {useMemo, useState} from "react";
-import {Search, X, Package} from "lucide-react";
+import {useEffect,} from "react";
+import {SearchIcon} from "lucide-react";
+import InputField from "../../../components/ui/input/input-field.tsx";
+import PrimaryButton from "../../../components/ui/button/primary-button.tsx";
+import Table, {type Column} from "../../../components/ui/table/table.tsx";
+import {useNavigate, useSearchParams} from "react-router-dom";
+import {useCurrency} from "../../../hooks/useCurrency.ts";
+import {useToast} from "../../../hooks/useToast.tsx";
+import {useProducts} from "../../../hooks/useProducts.ts";
+import type {Product} from "../../../models/product.ts";
+import ImageWithSkeleton from "../../../components/ui/images/image-with-skeleton.tsx";
+import {useProductSearchStore} from "../../../store/product-search-store.ts";
 
-interface Product {
-  id: string;
-  name: string;
-  category: string;
-  price: number;
-}
-
-const mockProducts: Product[] = [
-  {id: "1", name: "Wireless Headphones", category: "Electronics", price: 120},
-  {id: "2", name: "Running Shoes", category: "Sports", price: 85},
-  {id: "3", name: "Office Chair", category: "Home", price: 210},
-  {id: "4", name: "Smart Watch", category: "Electronics", price: 150},
-  {id: "5", name: "Yoga Mat", category: "Sports", price: 30},
-];
 
 const ProductSearchPage = () => {
-  const [query, setQuery] = useState("");
-  const [category, setCategory] = useState<string>("all");
+  const {useSearchProductsInfinite} = useProducts();
+  const {showToast, ToastComponent} = useToast();
+  const {currencySymbol} = useCurrency();
+  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const categories = useMemo(
-    () => ["all", "Electronics", "Sports", "Home"],
-    []
-  );
+  const query = useProductSearchStore(state => state.query);
+  const setQuery = useProductSearchStore(state => state.setQuery);
+  const filter = useProductSearchStore(state => state.filter);
+  const setFilter = useProductSearchStore(state => state.setFilter);
 
-  const filteredProducts = useMemo(() => {
-    return mockProducts.filter((product) => {
-      const matchesQuery = product.name
-        .toLowerCase()
-        .includes(query.toLowerCase());
+  const sortBy = useProductSearchStore((state) => state.sortBy);
+  const setSortBy = useProductSearchStore(state => state.setSortBy);
+  const order = useProductSearchStore((state) => state.order);
+  const setOrder = useProductSearchStore(state => state.setOrder);
+  const toggleSortBy = useProductSearchStore((state) => state.toggleSortBy);
 
-      const matchesCategory =
-        category === "all" || product.category === category;
+  const limit = useProductSearchStore((state) => state.limit);
+  const setLimit = useProductSearchStore(state => state.setLimit);
 
-      return matchesQuery && matchesCategory;
-    });
-  }, [query, category]);
+  const {
+    data,
+    isLoading,
+    isError,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useSearchProductsInfinite({
+    q: query,
+    limit: limit,
+    select: 'id,title,brand,thumbnail,price,rating,availabilityStatus',
+    sortBy,
+    order,
+    options: {enabled: true}
+  });
 
+
+  const columns: Column<Product, keyof Product>[] = [
+    {
+      dataIndex: "id",
+      header: "ID",
+      width: 60,
+      minWidth: 50,
+      align: 'right',
+    },
+    {
+      dataIndex: "title",
+      header: "Product Title",
+      render: (val) => val as string ?? 'N/A',
+    },
+    {
+      dataIndex: 'brand',
+      header: 'Brand',
+      render: (val) => val as string ?? 'Unknown Brand',
+    },
+    {
+      dataIndex: "thumbnail",
+      header: "Thumbnail",
+      align: 'center',
+      // render: (val) => <img src={val as string} alt="product" className="w-16 h-16 rounded-md bg-white"/>,
+      render: (val) => {
+
+        return (
+          <div className={'flex items-center justify-center'}>
+            <ImageWithSkeleton src={val as string} alt="product" className="w-16 h-16 rounded-md bg-white"/>
+          </div>
+        );
+      },
+    },
+    {
+      dataIndex: "price",
+      header: "Price",
+      align: 'center',
+      render: (val) => val != null ? `${currencySymbol}${val}` : 'N/A',
+    },
+    {
+      dataIndex: "rating",
+      header: "Rating",
+      render: (val) => val as string ?? 'N/A',
+    },
+    {
+      dataIndex: 'availabilityStatus',
+      header: "Availability Status",
+      render: (val) => val as string ?? 'N/A',
+    }
+
+  ];
+
+  const products = data?.pages.flatMap(page => page.products) || [];
+
+  const filteredProducts = products.filter(product => {
+    if (!filter.trim()) return true;
+    const lower = filter.toLowerCase();
+    return (
+      product.title.toLowerCase().includes(lower)
+    );
+  });
+
+  useEffect(() => {
+    if (isError && error) {
+      showToast(error.message ?? "Failed to load products", "error");
+    }
+  }, [isError, error, showToast]);
+
+  useEffect(() => {
+    const params: Record<string, string> = {};
+
+    if (query) params.q = query;
+    if (filter) params.filter = filter;
+    if (sortBy) params.sortBy = sortBy;
+    if (order) params.order = order;
+    if (limit) params.limit = String(limit);
+
+    setSearchParams(params, {replace: true});
+  }, [query, filter, sortBy, order, setSearchParams, limit]);
+
+  useEffect(() => {
+    const query = searchParams.get("q") ?? "";
+    const filter = searchParams.get("filter") ?? "";
+    const sortBy = searchParams.get("sortBy") ?? "";
+    const order = searchParams.get("order") ?? "";
+    const limit = searchParams.get("limit") ?? 0;
+
+    setQuery(query);
+    setFilter(filter);
+    setSortBy(sortBy)
+    if (limit) {
+      const parsedLimit = Number(limit);
+      if (!Number.isNaN(parsedLimit)) {
+        setLimit(parsedLimit);
+      }
+    }
+
+    if (order === "asc" || order === "desc") {
+      setOrder(order);
+    }
+  }, [searchParams, setFilter, setLimit, setOrder, setQuery, setSortBy]);
+
+  // console.log('searchParams', searchParams)
   return (
     <div className="flex flex-col gap-6 p-6 h-full">
+      {ToastComponent}
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-justgo-green">
+        <h1 className="text-2xl font-bold text-white bg-justgo-green px-2 py-1 rounded-full text-center w-fit">
           Search Products
+
         </h1>
-        <p className="text-sm text-gray-500">
+        <p>
           Find products by name or category
         </p>
       </div>
 
       {/* Search controls */}
-      <div className="flex flex-wrap gap-4 items-center bg-white p-4 rounded-lg shadow-sm">
-        {/* Search input */}
-        <div className="relative flex-1 min-w-[240px]">
-          <Search
-            size={16}
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-          />
-          <input
-            type="text"
+      <div className="flex flex-col sm:flex-row gap-4 items-center justify-between bg-white/20 p-4 rounded-lg shadow-lg">
+        <div className={'flex gap-4 items-center'}>
+          <InputField
+            parentClassName={'w-40 sm:w-80'}
             placeholder="Search products..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="w-full pl-9 pr-9 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-justgo-green"
           />
-          {query && (
-            <button
-              onClick={() => setQuery("")}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-            >
-              <X size={14}/>
-            </button>
-          )}
+          <PrimaryButton
+            slim
+            className={'w-36 '}
+            disabled={!query}
+            onClick={() => setQuery("")}
+            icon={SearchIcon}
+          >
+            Search
+          </PrimaryButton>
         </div>
-
-        {/* Category filter */}
-        <select
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          className="border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-justgo-green"
+        <PrimaryButton
+          slim
+          className={' w-58'}
+          onClick={() => toggleSortBy("price")}
         >
-          {categories.map((cat) => (
-            <option key={cat} value={cat}>
-              {cat === "all" ? "All Categories" : cat}
-            </option>
-          ))}
-        </select>
+          {sortBy === "price"
+            ? `Sorting by price (${order === "asc" ? "↑" : "↓"})`
+            : "Default Sorting"}
+        </PrimaryButton>
       </div>
 
-      {/* Results */}
-      <div className="flex-1 overflow-auto">
-        {filteredProducts.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-full text-gray-400 gap-2">
-            <Package size={40}/>
-            <p>No products found</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filteredProducts.map((product) => (
-              <div
-                key={product.id}
-                className="border rounded-lg bg-white p-4 hover:shadow-md transition-all"
-              >
-                <h3 className="font-semibold text-gray-800">
-                  {product.name}
-                </h3>
-                <p className="text-sm text-gray-500">
-                  {product.category}
-                </p>
-
-                <div className="mt-4 flex items-center justify-between">
-                  <span className="font-semibold text-justgo-green">
-                    ${product.price}
-                  </span>
-                  <button className="text-sm text-justgo-green hover:underline">
-                    View
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+      <Table
+        columns={columns}
+        data={filteredProducts}
+        onRowClick={(row: Product) => {
+          navigate(`/products/${row.id}`);
+        }}
+        filterValue={filter}
+        onFilterValueChange={(value) => {
+          setFilter(value);
+        }}
+        onScrollEnd={() => {
+          if (!isFetchingNextPage && hasNextPage) {
+            fetchNextPage()
+          }
+        }}
+        loading={isLoading || isFetchingNextPage}
+        emptyText={'No products found'}
+      />
     </div>
   );
 };

@@ -3,7 +3,13 @@ import {useProductService} from "../services/product-service/product-service.ts"
 
 export const useProducts = () => {
   const queryClient = useQueryClient();
-  const {getAllProducts, getProductById, getProductsByCategory, getAllProductCategories} = useProductService();
+  const {
+    getAllProducts,
+    getProductById,
+    getProductsByCategory,
+    getAllProductCategories,
+    searchProducts
+  } = useProductService();
 
 
   const useGetAllProductsInfinite = ({
@@ -74,6 +80,48 @@ export const useProducts = () => {
     });
   }
 
+  const useSearchProductsInfinite = ({
+                                       q = '',
+                                       limit = 20,
+                                       skip = 0,
+                                       sortBy = "",
+                                       order = "asc",
+                                       select = "",
+                                       options = {enabled: false},
+                                     }: {
+    q?: string;
+    limit?: number;
+    skip?: number;
+    sortBy?: string;
+    order?: "asc" | "desc" | null;
+    select?: string;
+    options?: { enabled?: boolean; };
+  } = {}) => {
+    return useInfiniteQuery({
+      queryKey: ["products", q, limit, skip, sortBy, order, select],
+      queryFn: async ({pageParam = skip}: { pageParam?: number }) => {
+        // pageParam is used as `skip` for the next page
+        return searchProducts({
+          q,
+          limit,
+          skip: pageParam,
+          sortBy,
+          order,
+          select,
+        });
+      },
+      getNextPageParam: (lastPage) => {
+        const nextSkip = lastPage.skip + lastPage.limit;
+        return nextSkip < lastPage.total ? nextSkip : undefined;
+      },
+      initialPageParam: skip, // Start with no cursor
+      staleTime: 10 * 60 * 1000,
+      // gcTime: 30 * 60 * 1000,
+      enabled: options.enabled ?? true,
+    });
+  };
+
+
   // Function to invalidate all channel queries
   const invalidateProducts = () => {
     queryClient.invalidateQueries({queryKey: ['products']});
@@ -85,5 +133,7 @@ export const useProducts = () => {
     useFetchProductById,
     invalidateProducts,
     useGetAllCategories,
+    useSearchProductsInfinite,
+
   };
 };

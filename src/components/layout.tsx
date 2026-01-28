@@ -2,10 +2,10 @@ import {Outlet, Link, NavLink, useLocation} from "react-router-dom";
 import {cn} from "../utils/cn.ts";
 import {useEffect, useState} from "react";
 import {Tooltip} from "@mui/material";
-import {useColourMode} from "../hooks/useColourMode.ts";
-import ActionButton from "./ui/button/action-button.tsx";
-import Brightness7Icon from '@mui/icons-material/Brightness7';
-import BedtimeIcon from '@mui/icons-material/Bedtime';
+// import {useColourMode} from "../hooks/useColourMode.ts";
+// import ActionButton from "./ui/button/action-button.tsx";
+// import Brightness7Icon from '@mui/icons-material/Brightness7';
+// import BedtimeIcon from '@mui/icons-material/Bedtime';
 import {
   Home,
   Package,
@@ -14,11 +14,13 @@ import {
   Settings,
   PanelLeftOpen,
   PanelLeftClose,
-  PackageSearch, ChevronDown, ChevronUp,
+  PackageSearch, ChevronDown, ChevronUp, UserIcon,
 } from "lucide-react";
+import GhostButton from "./ui/button/ghost-button.tsx";
+import ImageWithSkeleton from "./ui/images/image-with-skeleton.tsx";
 
 const Layout = () => {
-  const {mode, toggleMode} = useColourMode();
+  // const {mode, toggleMode} = useColourMode();
   const location = useLocation();
 
   const productRoutes = [
@@ -59,7 +61,7 @@ const Layout = () => {
 
   return (
     <div className="h-screen w-full flex flex-col bg-justgo-green">
-      <header className="flex justify-between items-center text-white p-1 h-12">
+      <header className="flex justify-between items-center text-white p-1 h-12 pr-4">
         <div className="flex w-fit gap-6 h-full justify-center items-center">
           <Tooltip title={isSidebarExpanded ? 'Collapse Sidebar' : 'Expand Sidebar'} arrow placement={'right'}>
             <div
@@ -80,14 +82,33 @@ const Layout = () => {
             <h1 className="text-sm md:text-lg font-bold">JustGo International</h1>
           </Link>
         </div>
-        <div className="flex gap-6 items-center justify-between bg-white text-justgo-green rounded-md px-4">
-          <ActionButton
-            helperText={mode === "dark" ? "Switch to light theme" : "Switch to dark theme"}
-            onClick={toggleMode}
-            className={'h-8 w-8 !border-none'}
-            icon={mode === "dark" ? Brightness7Icon : BedtimeIcon}
-          />
-          <span>Username</span>
+        <div
+          className="flex gap-2 items-center justify-between bg-gray-100 dark:bg-neutral-600 text-justgo-green rounded-md">
+          {/*<ActionButton*/}
+          {/*  helperText={mode === "dark" ? "Switch to light theme" : "Switch to dark theme"}*/}
+          {/*  onClick={toggleMode}*/}
+          {/*  className={'h-8 w-8 !border-none'}*/}
+          {/*  icon={mode === "dark" ? Brightness7Icon : BedtimeIcon}*/}
+          {/*/>*/}
+          <GhostButton
+            slim
+            className={'h-8 w-42'}
+            icon={UserIcon}
+          >
+            <div className="flex h-fit w-fit px-4 items-center gap-3 truncate">
+              <ImageWithSkeleton
+                src={"https://lh3.googleusercontent.com/a/ACg8ocIc34Vr07YzWVPhlf4XU-Buix-xHGbRF-Fy2EXBEAFYH9O-RZ54=s288-c-no"}
+                placeholder={"/assets/images/avatar.png"}
+                alt={'U'}
+                className="w-6 h-6 rounded-full border items-center justify-center border-krowten-green truncate"
+              />
+
+              <div className="flex flex-col items-start">
+                <span className="text-sm">User Man</span>
+                {/*<span className="text-xs text-gray-500">{user.email}</span>*/}
+              </div>
+            </div>
+          </GhostButton>
         </div>
       </header>
 
@@ -195,7 +216,8 @@ const Layout = () => {
           })}
         </div>
 
-        <main className="flex-1 flex flex-col w-full min-h-0 overflow-hidden rounded-lg bg-gray-100 dark:bg-neutral-600">
+        <main
+          className="flex-1 flex flex-col w-full min-h-0 overflow-hidden rounded-lg bg-gray-100 dark:bg-neutral-600">
           <Outlet/>
         </main>
       </div>

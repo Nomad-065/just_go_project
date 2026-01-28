@@ -8,11 +8,13 @@ import GhostButton from "../../../components/ui/button/ghost-button.tsx";
 import {ArrowBigLeft} from "lucide-react";
 import type {Product} from "../../../models/product.ts";
 import ImageWithSkeleton from "../../../components/ui/images/image-with-skeleton.tsx";
+import {useNavigate} from "react-router-dom";
 
 
 const ProductCategoryPage = () => {
   const {useGetAllCategories, useGetProductsByCategory} = useProducts()
   const {showToast, ToastComponent} = useToast();
+  const navigate = useNavigate();
 
   const [filter, setFilter] = useState<string>('');
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
@@ -133,7 +135,10 @@ const ProductCategoryPage = () => {
 
             {products.map((product, index) => (
               <div
-                key={index}
+                key={product.id + index}
+                onClick={() => {
+                  navigate(`/products/${product.id}`);
+                }}
                 className={cn(
                   "flex h-20 gap-8 items-center justify-between p-4 rounded-lg ",
                   "border-2 border-justgo-green hover:shadow-lg hover:bg-justgo-blue transition-all cursor-pointer",
