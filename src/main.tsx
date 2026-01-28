@@ -12,11 +12,11 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <ThemeModeProvider>
-        <BrowserRouter>
-          <CurrencyProvider>
+        <CurrencyProvider>
+          <BrowserRouter>
             <App/>
-          </CurrencyProvider>
-        </BrowserRouter>
+          </BrowserRouter>
+        </CurrencyProvider>
       </ThemeModeProvider>
     </QueryClientProvider>
   </StrictMode>,

@@ -8,6 +8,7 @@ import {useToast} from "../../../hooks/useToast.tsx";
 import {useEffect} from "react";
 import PrimaryButton from "../../../components/ui/button/primary-button.tsx";
 import {useCurrency} from "../../../hooks/useCurrency.ts";
+import {useNavigate} from "react-router-dom";
 // import {useState} from "react";
 
 
@@ -15,6 +16,7 @@ const ProductListPage = () => {
   const {useGetAllProductsInfinite} = useProducts();
   const {showToast, ToastComponent} = useToast();
   const {currencySymbol} = useCurrency();
+  const navigate = useNavigate();
   // const [filter, setFilter] = useState<string>('');
   const filter = useProductFilterStore(state => state.filter);
   const setFilter = useProductFilterStore(state => state.setFilter);
@@ -45,9 +47,9 @@ const ProductListPage = () => {
   const columns: Column<Product, keyof Product>[] = [
     {
       dataIndex: "id",
-      header: "Product ID",
-      width: 120,
-      minWidth: 100,
+      header: "ID",
+      width: 60,
+      minWidth: 50,
       align: 'right',
     },
     {
@@ -133,7 +135,9 @@ const ProductListPage = () => {
       <Table
         columns={columns}
         data={filteredProducts}
-        onRowClick={(row: Product) => console.log("Row clicked:", row)}
+        onRowClick={(row: Product) => {
+          navigate(`/products/${row.id}`);
+        }}
         filterValue={filter}
         onFilterValueChange={(value) => {
           setFilter(value);

@@ -39,10 +39,11 @@ const ImageWithSkeleton = ({
 
   useEffect(() => {
     // Reset state when src changes
-    // setLoaded(false);
-    // setError(false);
-    // setRetryCount(0);
-    // setCurrentSrc(src);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setLoaded(false);
+    setError(false);
+    setRetryCount(0);
+    setCurrentSrc(src);
 
     // Cleanup timeout on unmount
     return () => {
