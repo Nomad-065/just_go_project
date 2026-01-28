@@ -36,7 +36,7 @@ const SettingsPage = () => {
           </div>
 
           <div className="flex flex-col gap-4">
-            <InputField label={'Username'} value={'Name of User'} readOnly/>
+            <InputField label={'Username'} value={'User Man'} readOnly/>
             <InputField label={'Email'} value={'email@justgo.com'} readOnly/>
           </div>
         </div>
