@@ -3,7 +3,7 @@ import {useProductService} from "../services/product-service/product-service.ts"
 
 export const useProducts = () => {
   const queryClient = useQueryClient();
-  const {getAllProducts, getProductById} = useProductService();
+  const {getAllProducts, getProductById, getProductsByCategory, getAllProductCategories} = useProductService();
 
 
   const useGetAllProductsInfinite = ({
@@ -44,6 +44,26 @@ export const useProducts = () => {
     });
   };
 
+  const useGetAllCategories = () => {
+    return useQuery({
+      queryKey: ['categories'],
+      queryFn: () => getAllProductCategories(),
+      // enabled: !!category, // only runs if id is provided
+      staleTime: 10 * 60 * 1000,  // 10 min
+      gcTime: 30 * 60 * 1000, // 30 min
+    });
+  }
+
+  const useGetProductsByCategory = (category: string) => {
+    return useQuery({
+      queryKey: ['products', category],
+      queryFn: () => getProductsByCategory(category),
+      enabled: !!category, // only runs if id is provided
+      staleTime: 10 * 60 * 1000,  // 10 min
+      gcTime: 30 * 60 * 1000, // 30 min
+    });
+  }
+
   const useFetchProductById = (id: number) => {
     return useQuery({
       queryKey: ['product', id],
@@ -61,7 +81,9 @@ export const useProducts = () => {
 
   return {
     useGetAllProductsInfinite,
+    useGetProductsByCategory,
     useFetchProductById,
-    invalidateProducts
+    invalidateProducts,
+    useGetAllCategories,
   };
 };

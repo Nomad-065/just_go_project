@@ -37,7 +37,7 @@ const GhostButton = ({
       // variant='text'
       className={cn(
         "text-justgo-green dark:text-gray-300 !font-semibold",
-        "hover:!bg-justgo-green/20 transition-all truncate",
+        "hover:!bg-justgo-green/20 transition-all truncate dark:brightness-125",
         "group relative overflow-hidden flex items-center justify-center gap-2 rounded-md",
         className
       )}

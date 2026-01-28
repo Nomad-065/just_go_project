@@ -1,5 +1,6 @@
 import {axiosClient} from "../axios-client.ts";
 import type {Product} from "../../models/product.ts";
+import type {Category} from "../../models/category.ts";
 
 interface ProductQueryParams {
   limit?: number;
@@ -35,6 +36,18 @@ export const useProductService = () => {
     return axiosResponse.data;
   };
 
+  /** Fetch all product categories */
+  const getAllProductCategories = async (): Promise<Category[]> => {
+    const axiosResponse = await axiosClient.get<Category[]>(`${productEndpoint}/categories`);
+    return axiosResponse.data;
+  };
+
+  /** Fetch products by category */
+  const getProductsByCategory = async (slug: string): Promise<ProductAPIResponse> => {
+    const axiosResponse = await axiosClient.get<ProductAPIResponse>(`${productEndpoint}/category/${slug}`);
+    return axiosResponse.data;
+  };
+
   /** Fetch single product by ID */
   const getProductById = async (id: number): Promise<Product> => {
     const axiosResponse = await axiosClient.get<Product>(`${productEndpoint}/${id}`);
@@ -43,6 +56,8 @@ export const useProductService = () => {
 
   return {
     getAllProducts,
+    getProductsByCategory,
+    getAllProductCategories,
     getProductById,
   };
 };
