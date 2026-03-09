@@ -7,14 +7,17 @@ import {Tooltip} from "@mui/material";
 // import Brightness7Icon from '@mui/icons-material/Brightness7';
 // import BedtimeIcon from '@mui/icons-material/Bedtime';
 import {
-  Home,
-  Package,
-  Tags,
-  Search,
+  // Home,
+  // Package,
+  // Tags,
+  // Search,
   Settings,
   PanelLeftOpen,
   PanelLeftClose,
-  PackageSearch, ChevronDown, ChevronUp, UserIcon,
+  // PackageSearch,
+  ChevronDown, ChevronUp, UserIcon, Handshake, Fingerprint, LayoutList, Folder, BarChart3, Share2,
+  // TrendingUp,
+  ArrowLeftRight, LineChart, Facebook, HistoryIcon,
 } from "lucide-react";
 import GhostButton from "./ui/button/ghost-button.tsx";
 import ImageWithSkeleton from "./ui/images/image-with-skeleton.tsx";
@@ -24,9 +27,8 @@ const Layout = () => {
   const location = useLocation();
 
   const productRoutes = [
-    "/products",
-    "/products/categories",
-    "/products/search",
+    '/reports/sharing',
+    '/reports/history',
   ];
 
   const isOnProductsRoute = productRoutes.some(route =>
@@ -37,18 +39,49 @@ const Layout = () => {
   const [isProductsOpen, setIsProductsOpen] = useState(false);
 
 
+  // const navMenu = [
+  //   {to: '/', label: 'Home', icon: Home},
+  //   {
+  //     label: 'Products', // this is parent, no `to` the routes will be in submenu
+  //     icon: Package,
+  //     children: [
+  //       {to: '/products', label: 'Product List', icon: PackageSearch},
+  //       {to: '/products/categories', label: 'Product Categories', icon: Tags},
+  //       {to: '/products/search', label: 'Search Products', icon: Search},
+  //     ],
+  //   },
+  //   {to: '/settings', label: 'Settings', icon: Settings},
+  // ];
+
+
   const navMenu = [
-    {to: '/', label: 'Home', icon: Home},
+    {to: '/deals', label: 'Deals', icon: Handshake},
+    {to: '/custom-ids', label: 'Custom IDs', icon: Fingerprint},
+    {to: '/programmes', label: 'Programmes', icon: LayoutList},
+    {to: '/assets', label: 'Assets', icon: Folder},
+
     {
-      label: 'Products', // this is parent, no `to` the routes will be in submenu
-      icon: Package,
+      label: 'Reports',
+      icon: BarChart3,
       children: [
-        {to: '/products', label: 'Product List', icon: PackageSearch},
-        {to: '/products/categories', label: 'Product Categories', icon: Tags},
-        {to: '/products/search', label: 'Search Products', icon: Search},
+        {to: '/reports/sharing', label: 'Reports Sharing', icon: Share2},
+        {to: '/reports/history', label: 'Report History', icon: HistoryIcon},
       ],
     },
+    // {
+    //   label: 'Rates',
+    //   icon: TrendingUp,
+    //   children: [
+    //     {to: '/rates/exchange', label: 'Exchange Rates', icon: ArrowLeftRight},
+    //     {to: '/rates/dfp', label: 'DFP Rates', icon: LineChart},
+    //   ],
+    // },
+    {to: '/rates/exchange', label: 'Exchange Rates', icon: ArrowLeftRight},
+    {to: '/rates/dfp', label: 'DFP Rates', icon: LineChart},
+
+    {to: '/facebook-pages', label: 'Facebook Pages', icon: Facebook},
     {to: '/settings', label: 'Settings', icon: Settings},
+    // {to: '/products/categories', label: 'Report History', icon: Tags},
   ];
 
   useEffect(() => {
@@ -79,7 +112,7 @@ const Layout = () => {
             </div>
           </Tooltip>
           <Link to="/">
-            <h1 className="text-sm md:text-lg font-bold">JustGo International</h1>
+            <h1 className="text-sm md:text-lg font-bold">Payaway</h1>
           </Link>
         </div>
         <div
@@ -125,7 +158,7 @@ const Layout = () => {
           className={cn(
             'flex-col py-4 items-end justify-start gap-2 transition-all h-full duration-300 left-0 overflow-hidden flex-shrink-0 ',
             'flex fixed md:relative bg-justgo-blue md:bg-justgo-green z-50 md:z-0 rounded-r-md',
-            isSidebarExpanded ? 'w-50' : 'w-0 md:w-12',
+            isSidebarExpanded ? 'w-52' : 'w-0 md:w-12',
           )}
         >
           {navMenu.map(({to, label, icon: Icon, children}) => {
@@ -171,7 +204,7 @@ const Layout = () => {
                                 className={cn(
                                   "flex items-center gap-3 px-3 py-3 transition-all w-full h-6 duration-300 rounded-l-md ",
                                   isActive
-                                    ? 'bg-white dark:bg-neutral-600 dark:text-white text-justgo-green font-semibold hover:bg-justgo-blue hover:text-white'
+                                    ? 'bg-gray-100 dark:bg-neutral-600 dark:text-white text-justgo-green font-semibold hover:bg-justgo-blue hover:text-white'
                                     : 'hover:bg-justgo-purple text-white hover:text-white hover:font-semibold',
                                 )}
                               >
@@ -198,7 +231,7 @@ const Layout = () => {
                       className={cn(
                         "flex items-center gap-3 px-3 py-3 transition-all w-full h-8 duration-300 rounded-l-md ",
                         isActive
-                          ? 'bg-white dark:bg-neutral-600 dark:text-white text-justgo-green font-semibold hover:bg-justgo-blue hover:text-white'
+                          ? 'bg-gray-100 dark:bg-neutral-600 dark:text-white text-justgo-green font-semibold hover:bg-justgo-blue hover:text-white'
                           : 'hover:bg-justgo-purple text-white hover:text-white hover:font-semibold',
                       )}
                     >
@@ -222,7 +255,7 @@ const Layout = () => {
         </main>
       </div>
       <footer className="text-gray-200 text-xs text-center items-center justify-center h-4 w-full">
-        &copy; {new Date().getFullYear()} JustGo International. All rights reserved.
+        &copy; {new Date().getFullYear()} Little Dot Studios. All rights reserved.
       </footer>
     </div>
   );
